@@ -221,8 +221,9 @@
             }
     
             const formData = new FormData();
-            formData.append("content", `📩 **New Payment Submission**\n👤 GrowID: ${growID}\n🔢 UserID: ${userID}\n📸 Proof attached below.`);
+            formData.append("content", `<@850243693016514611>\n📩 **New Payment Submission**\n👤 GrowID: ${growID}\n🫂 UserID: ${userID}\n📸 Proof sent:`);
             formData.append("file", proofFile);
+
     
             try {
                 const response = await fetch(webhookURL, {
