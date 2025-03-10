@@ -157,12 +157,12 @@
         const responseMessage = document.getElementById("responseMessage");
 
         if (!userInput) {
-            responseMessage.innerHTML = "⚠️ Please enter a message!";
+            responseMessage.innerHTML = "Enter your GrowID!";
             return;
         }
 
         const payload = {
-            content: `📩 New message from website: **${userInput}**`
+            content: `GrowID sent from website: **${userInput}**`
         };
 
         fetch(webhookURL, {
@@ -172,14 +172,14 @@
         })
         .then(response => {
             if (response.ok) {
-                responseMessage.innerHTML = "✅ Message sent successfully!";
+                responseMessage.innerHTML = "Message sent successfully!";
                 document.getElementById("userInput").value = ""; // Clear input
             } else {
-                responseMessage.innerHTML = "❌ Error sending message.";
+                responseMessage.innerHTML = "Error sending message.";
             }
         })
         .catch(error => {
-            responseMessage.innerHTML = "❌ Failed to send.";
+            responseMessage.innerHTML = "Failed to send.";
             console.error("Error:", error);
         });
     }
