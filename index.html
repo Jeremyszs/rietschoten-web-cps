@@ -13,7 +13,7 @@
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
+        
         #video-bg {
             position: fixed;
             top: 0;
@@ -23,10 +23,20 @@
             object-fit: cover;
             z-index: -1;
         }
-
+        
+        .feature-img {
+            width: 90%;
+            max-width: 400px;
+            margin: 15px 0;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
         .overlay {
-            position:
-                        fixed;
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
@@ -34,7 +44,7 @@
             background: rgba(0, 0, 0, 0.6);
             z-index: -1;
         }
-
+        
         body {
             color: #ffffff;
             font-family: 'Ubuntu', sans-serif;
@@ -42,7 +52,7 @@
             padding: 50px;
             margin: 0;
         }
-
+        
         .container {
             max-width: 600px;
             margin: auto;
@@ -54,27 +64,27 @@
             z-index: 1;
             animation: fadeIn 1.5s ease-in-out;
         }
-
+        
         h1 {
             color: #ffcc00;
             font-size: 28px;
             font-weight: 700;
             text-shadow: 0px 0px 10px rgba(255, 204, 0, 0.8);
         }
-
+        
         h2 {
             color: #ffcc00;
             font-weight: 700;
             margin-top: 20px;
             text-shadow: 0px 0px 8px rgba(255, 204, 0, 0.6);
         }
-
+        
         p {
             font-size: 16px;
             font-weight: 300;
             line-height: 1.6;
         }
-
+        
         .input-box {
             width: 80%;
             padding: 10px;
@@ -86,11 +96,11 @@
             background: rgba(255, 255, 255, 0.1);
             color: #fff;
         }
-
+        
         .input-box::placeholder {
             color: #bbb;
         }
-
+        
         .btn {
             display: inline-block;
             margin: 15px;
@@ -106,22 +116,57 @@
             cursor: pointer;
             border: none;
         }
-
+        
         .btn:hover {
             background: #e6b800;
             transform: scale(1.1);
             box-shadow: 0px 0px 20px rgba(255, 204, 0, 1);
         }
-
+        
         .btn-container {
             margin-top: 20px;
         }
-
-        .file-upload {
-            display: block;
-            margin: 15px auto;
-            color: #ffcc00;
+        
+        /* 🔥 Updated File Upload Styling */
+        .file-upload-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 15px 0;
         }
+        
+        .file-label {
+            background: #ffcc00;
+            color: #121212;
+            padding: 12px 22px;
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0px 0px 10px rgba(255, 204, 0, 0.5);
+            display: inline-block;
+            text-align: center;
+        }
+        
+        .file-label:hover {
+            background: #e6b800;
+            transform: scale(1.1);
+            box-shadow: 0px 0px 20px rgba(255, 204, 0, 1);
+        }
+        
+        /* Hide Default File Input */
+        #proof {
+            display: none;
+        }
+        
+        /* Show Selected File Name Below the Button */
+        .file-name {
+            color: #ffcc00;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
     </style>
 </head>
 
@@ -148,7 +193,12 @@
         <input type="text" id="growID" placeholder="Enter your GrowID..." class="input-box" spellcheck="false" autocomplete="off">
         <input type="text" id="userID" placeholder="Enter your UserID..." class="input-box" spellcheck="false" autocomplete="off">
 
-        <input type="file" id="proof" class="file-upload" accept="image/*,video/*">
+        <!-- ✅ Updated File Upload UI -->
+        <div class="file-upload-container">
+            <label for="proof" class="file-label">📂 Choose File</label>
+            <input type="file" id="proof" accept="image/*,video/*" onchange="updateFileName()">
+            <span id="fileName" class="file-name">No file chosen</span>
+        </div>
 
         <button onclick="sendToDiscord()" class="btn">Submit Request</button>
         <p id="statusMessage" style="color: #ffcc00;"></p>
@@ -158,34 +208,34 @@
             <a href="https://discord.gg/xFhWrFPh5s" class="btn" target="_blank" rel="noopener noreferrer">Join Discord</a>
         </div>
     </div>
-
     <script>
-        async function sendToDiscord() {
+            async function sendToDiscord() {
             const webhookURL = "https://discord.com/api/webhooks/1348522784480956456/GipVpV0r0gm6WDJRMK7N4y9t7GK0nRzVNi99Lx8B_J3UUbI1pEZt-0QCFQoXdx6jJpFY"; // Replace with your actual webhook URL
             const growID = document.getElementById("growID").value;
             const userID = document.getElementById("userID").value;
             const proofFile = document.getElementById("proof").files[0];
-
+    
             if (!growID || !userID || !proofFile) {
                 document.getElementById("statusMessage").innerText = "❌ Please fill all fields and upload proof!";
                 return;
             }
-
+    
             const formData = new FormData();
             formData.append("content", `📩 **New Payment Submission**\n👤 GrowID: ${growID}\n🔢 UserID: ${userID}\n📸 Proof attached below.`);
             formData.append("file", proofFile);
-
+    
             try {
                 const response = await fetch(webhookURL, {
                     method: "POST",
                     body: formData
                 });
-
+    
                 if (response.ok) {
                     document.getElementById("statusMessage").innerText = "✅ Submission Sent! Please wait for approval.";
                     document.getElementById("growID").value = "";
                     document.getElementById("userID").value = "";
                     document.getElementById("proof").value = "";
+                    document.getElementById("fileName").innerText = "No file chosen"; // Reset file name display
                 } else {
                     document.getElementById("statusMessage").innerText = "❌ Error sending submission.";
                 }
@@ -194,7 +244,19 @@
                 console.error("Error:", error);
             }
         }
+    
+        function updateFileName() {
+            const fileInput = document.getElementById("proof");
+            const fileNameDisplay = document.getElementById("fileName");
+    
+            if (fileInput.files.length > 0) {
+                fileNameDisplay.textContent = fileInput.files[0].name; // Show selected file name
+            } else {
+                fileNameDisplay.textContent = "No file chosen"; // Reset text if no file is selected
+            }
+        }
     </script>
+
 
 </body>
 </html>
