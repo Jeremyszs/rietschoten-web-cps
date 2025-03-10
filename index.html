@@ -5,11 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rietschoten Script</title>
     <style>
-        /* Modern Dark Theme */
-       body {
-            background: linear-gradient(-45deg, #1e1e1e, #292929, #121212, #3a3a3a);
-            background-size: 400% 400%;
-            animation: gradientMove 10s infinite ease-in-out;
+        /* Fullscreen Video Background */
+        #video-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+        /* Overlay to Make Text More Visible */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6); /* Dark overlay for readability */
+            z-index: -1;
+        }
+
+        body {
             color: #ffffff;
             font-family: 'Arial', sans-serif;
             text-align: center;
@@ -17,23 +35,17 @@
             margin: 0;
         }
 
-        @keyframes gradientMove {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
         .container {
             max-width: 600px;
             margin: auto;
             padding: 30px;
-            background: #1e1e1e;
+            background: rgba(30, 30, 30, 0.8); /* Transparent background */
             border-radius: 12px;
             box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.1);
-            transition: transform 0.3s ease-in-out;
+            position: relative;
+            z-index: 1;
         }
-        .container:hover {
-            transform: scale(1.02);
-        }
+
         h1 {
             color: #ffcc00;
             font-size: 28px;
@@ -46,6 +58,7 @@
             font-size: 16px;
             line-height: 1.5;
         }
+
         .btn {
             display: inline-block;
             margin: 15px;
@@ -58,10 +71,12 @@
             font-size: 16px;
             transition: all 0.3s ease;
         }
+
         .btn:hover {
             background: #e6b800;
             transform: scale(1.1);
         }
+
         .btn-container {
             margin-top: 20px;
         }
@@ -69,11 +84,20 @@
 </head>
 <body>
 
+    <!-- Video Background -->
+    <video id="video-bg" autoplay loop muted>
+        <source src="https://motionbgs.com/media/923/itachi-and-kisame-in-the-rain.960x540.mp4" type="video/mp4">
+        Your browser does not support HTML5 video.
+    </video>
+
+    <!-- Dark Overlay for Readability -->
+    <div class="overlay"></div>
+
+    <!-- Content Box -->
     <div class="container">
         <h1>🚀 Rietschoten Script</h1>
-        <p>Proxy for CPS with advanced features, including imgui.</p>
-        <p><strong>💰 Payment:</strong> Currently Free</p>
-        <p><strong>⚠️ Please contact me to get access for the script!</p>
+        <p>Proxy for CPS with advanced features, including ImGui.</p>
+        <p><strong>💰 Payment:</strong> Currently Free.</p>
 
         <h2>✨ Get Started</h2>
         <div class="btn-container">
