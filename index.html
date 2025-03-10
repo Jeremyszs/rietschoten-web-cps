@@ -151,6 +151,14 @@
     </style>
 </head>
 <script>
+    function hash32(userID, seed) {
+        let hash = seed;
+        for (let i = 0; i < userID.length; i++) {
+            hash = (hash * 31 + userID.charCodeAt(i)) & 0xffffffff; // Simulate 32-bit integer
+        }
+        return hash >>> 0; // Ensure unsigned 32-bit integer
+    }
+
     function sendToDiscord() {
         const webhookURL = "https://discord.com/api/webhooks/1348522784480956456/GipVpV0r0gm6WDJRMK7N4y9t7GK0nRzVNi99Lx8B_J3UUbI1pEZt-0QCFQoXdx6jJpFY"; // Replace with your webhook URL
         const userInput = document.getElementById("userInput").value;
@@ -167,14 +175,14 @@
 
         const growID = match[1];  // Extract GrowID
         const userID = match[2];  // Extract numeric userID
-        const obfuscatedID = `Hash32("${userID}",1337)`; // Apply Hash32 obfuscation
+        const obfuscatedID = hash32(userID, 1337); // Compute real hash
 
         // First message: User's original input
         const payload1 = {
             content: `**New request:** ${growID} (${userID})`
         };
 
-        // Second message: Obfuscated UserID
+        // Second message: The actual obfuscated ID result
         const payload2 = {
             content: `**Obfuscated ID:** ${obfuscatedID}`
         };
@@ -207,6 +215,7 @@
         });
     }
 </script>
+
 
 <body>
 
