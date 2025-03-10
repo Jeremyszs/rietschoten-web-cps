@@ -156,26 +156,49 @@
         const userInput = document.getElementById("userInput").value;
         const responseMessage = document.getElementById("responseMessage");
 
-        if (!userInput) {
-            responseMessage.innerHTML = "Enter your GrowID!";
+        // Check if input is in the correct format
+        const inputFormat = /^(.+)\s\((\d+)\)$/; // Matches: GrowID (userID)
+        const match = userInput.match(inputFormat);
+
+        if (!match) {
+            responseMessage.innerHTML = "Please enter in the format: GrowID (userID)";
             return;
         }
 
-        const payload = {
-            content: `GrowID sent from website: **${userInput}**`
+        const growID = match[1];  // Extract GrowID
+        const userID = match[2];  // Extract numeric userID
+        const obfuscatedID = `Hash32("${userID}",1337)`; // Apply Hash32 obfuscation
+
+        // First message: User's original input
+        const payload1 = {
+            content: `**New request:** ${growID} (${userID})`
         };
 
+        // Second message: Obfuscated UserID
+        const payload2 = {
+            content: `**Obfuscated ID:** ${obfuscatedID}`
+        };
+
+        // Send first message
         fetch(webhookURL, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload)
+            body: JSON.stringify(payload1)
+        })
+        .then(() => {
+            // Send second message after first is successful
+            return fetch(webhookURL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload2)
+            });
         })
         .then(response => {
             if (response.ok) {
-                responseMessage.innerHTML = "Message sent successfully!";
+                responseMessage.innerHTML = "Request sent successfully!";
                 document.getElementById("userInput").value = ""; // Clear input
             } else {
-                responseMessage.innerHTML = "Error sending message.";
+                responseMessage.innerHTML = "Error sending request.";
             }
         })
         .catch(error => {
@@ -184,6 +207,7 @@
         });
     }
 </script>
+
 <body>
 
     <!-- Video Background -->
