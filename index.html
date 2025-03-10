@@ -6,13 +6,21 @@
     <title>Rietschoten Script</title>
     <style>
         /* Modern Dark Theme */
-        body {
-            background-color: #121212;
+       body {
+            background: linear-gradient(-45deg, #1e1e1e, #292929, #121212, #3a3a3a);
+            background-size: 400% 400%;
+            animation: gradientMove 10s infinite ease-in-out;
             color: #ffffff;
             font-family: 'Arial', sans-serif;
             text-align: center;
             padding: 50px;
             margin: 0;
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
         .container {
             max-width: 600px;
