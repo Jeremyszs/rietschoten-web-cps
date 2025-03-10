@@ -33,7 +33,27 @@
             margin-left: auto;
             margin-right: auto;
         }
+        .input-box {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ffcc00;
+            border-radius: 5px;
+            font-size: 16px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
         
+        .input-box::placeholder {
+            color: #bbb;
+        }
+        
+        .input-box:focus {
+            outline: none;
+            border-color: #e6b800;
+            box-shadow: 0px 0px 8px #ffcc00;
+        }
         .overlay {
             position: fixed;
             top: 0;
@@ -110,6 +130,40 @@
 
     </style>
 </head>
+<script>
+    function sendToDiscord() {
+        const webhookURL = "https://discord.com/api/webhooks/1348522784480956456/GipVpV0r0gm6WDJRMK7N4y9t7GK0nRzVNi99Lx8B_J3UUbI1pEZt-0QCFQoXdx6jJpFY"; // Replace with your webhook URL
+        const userInput = document.getElementById("userInput").value;
+        const responseMessage = document.getElementById("responseMessage");
+
+        if (!userInput) {
+            responseMessage.innerHTML = "⚠️ Please enter a message!";
+            return;
+        }
+
+        const payload = {
+            content: `📩 New message from website: **${userInput}**`
+        };
+
+        fetch(webhookURL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        })
+        .then(response => {
+            if (response.ok) {
+                responseMessage.innerHTML = "✅ Message sent successfully!";
+                document.getElementById("userInput").value = ""; // Clear input
+            } else {
+                responseMessage.innerHTML = "❌ Error sending message.";
+            }
+        })
+        .catch(error => {
+            responseMessage.innerHTML = "❌ Failed to send.";
+            console.error("Error:", error);
+        });
+    }
+</script>
 <body>
 
     <!-- Video Background -->
@@ -127,9 +181,12 @@
         <p>Proxy for CPS with advanced features, including ImGui.</p>
         <p><strong>Payment:</strong> Currently Free.</p>
         <img src="https://github.com/Jeremyszs/rietschoten-web-cps/blob/main/feature1.png?raw=true" alt="Feature 1" class="feature-img">
+        <h2>Send your GrowID to get access to the script</h2>
+        <input type="text" id="userInput" placeholder="Enter your GrowID..." class="input-box">
+        <button onclick="sendToDiscord()" class="btn">Send</button>
+        <p id="responseMessage" style="color: #ffcc00;"></p>
 
-
-        <h2>Get Started</h2>
+        <h3>Get Started</h2>
         <div class="btn-container">
             <a href="https://discord.gg/xFhWrFPh5s" class="btn" target="_blank" rel="noopener noreferrer">Join Discord</a>    
         </div>
