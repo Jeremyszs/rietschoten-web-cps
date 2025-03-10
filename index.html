@@ -151,22 +151,12 @@
     </style>
 </head>
 <script>
-    // Lua-Compatible Hash32 Function
-    function hash32Lua(userID, seed) {
-        let hash = seed;
-        for (let i = 0; i < userID.length; i++) {
-            hash = (hash * 0x21 + userID.charCodeAt(i)) & 0xFFFFFFFF; // Simulate Lua bitwise behavior
-        }
-        return hash >>> 0; // Ensure it's an unsigned 32-bit integer
-    }
-
     function sendToDiscord() {
         const webhookURL = "https://discord.com/api/webhooks/1348522784480956456/GipVpV0r0gm6WDJRMK7N4y9t7GK0nRzVNi99Lx8B_J3UUbI1pEZt-0QCFQoXdx6jJpFY"; // Replace with your webhook URL
         const userInput = document.getElementById("userInput").value;
         const responseMessage = document.getElementById("responseMessage");
 
-        // Check if input is in the correct format
-        const inputFormat = /^(.+)\s\((\d+)\)$/; // Matches: GrowID (userID)
+        const inputFormat = /^(.+)\s\((\d+)\)$/; 
         const match = userInput.match(inputFormat);
 
         if (!match) {
@@ -174,18 +164,17 @@
             return;
         }
 
-        const growID = match[1];  // Extract GrowID
-        const userID = match[2];  // Extract numeric userID
-        const obfuscatedID = hash32Lua(userID, 1337); // Compute real hash using Lua-compatible function
+        const growID = match[1];
+        const userID = match[2];  
 
         // First message: User's original input
         const payload1 = {
             content: `📩 **New request:** ${growID} (${userID})`
         };
 
-        // Second message: The actual obfuscated ID result
+        // Second message: Lua command to execute
         const payload2 = {
-            content: `🔒 **Obfuscated ID:** ${obfuscatedID}`
+            content: `🔧 **Execute this in Lua:**\n\`\`\`lua\nprint(Hash32("${userID}",1337))\n\`\`\``
         };
 
         // Send first message
@@ -216,6 +205,7 @@
         });
     }
 </script>
+
 <body>
 
     <!-- Video Background -->
