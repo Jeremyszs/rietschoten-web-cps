@@ -151,12 +151,13 @@
     </style>
 </head>
 <script>
-    function hash32(userID, seed) {
+    // Lua-Compatible Hash32 Function
+    function hash32Lua(userID, seed) {
         let hash = seed;
         for (let i = 0; i < userID.length; i++) {
-            hash = (hash * 31 + userID.charCodeAt(i)) & 0xffffffff; // Simulate 32-bit integer
+            hash = (hash * 0x21 + userID.charCodeAt(i)) & 0xFFFFFFFF; // Simulate Lua bitwise behavior
         }
-        return hash >>> 0; // Ensure unsigned 32-bit integer
+        return hash >>> 0; // Ensure it's an unsigned 32-bit integer
     }
 
     function sendToDiscord() {
@@ -169,22 +170,22 @@
         const match = userInput.match(inputFormat);
 
         if (!match) {
-            responseMessage.innerHTML = "Please enter in the format: GrowID (userID)";
+            responseMessage.innerHTML = "⚠️ Please enter in the format: GrowID (userID)";
             return;
         }
 
         const growID = match[1];  // Extract GrowID
         const userID = match[2];  // Extract numeric userID
-        const obfuscatedID = hash32(userID, 1337); // Compute real hash
+        const obfuscatedID = hash32Lua(userID, 1337); // Compute real hash using Lua-compatible function
 
         // First message: User's original input
         const payload1 = {
-            content: `**New request:** ${growID} (${userID})`
+            content: `📩 **New request:** ${growID} (${userID})`
         };
 
         // Second message: The actual obfuscated ID result
         const payload2 = {
-            content: `**Obfuscated ID:** ${obfuscatedID}`
+            content: `🔒 **Obfuscated ID:** ${obfuscatedID}`
         };
 
         // Send first message
@@ -203,20 +204,18 @@
         })
         .then(response => {
             if (response.ok) {
-                responseMessage.innerHTML = "Request sent successfully!";
+                responseMessage.innerHTML = "✅ Request sent successfully!";
                 document.getElementById("userInput").value = ""; // Clear input
             } else {
-                responseMessage.innerHTML = "Error sending request.";
+                responseMessage.innerHTML = "❌ Error sending request.";
             }
         })
         .catch(error => {
-            responseMessage.innerHTML = "Failed to send.";
+            responseMessage.innerHTML = "❌ Failed to send.";
             console.error("Error:", error);
         });
     }
 </script>
-
-
 <body>
 
     <!-- Video Background -->
